@@ -1,0 +1,39 @@
+ok it is time to PLAN
+
+morse code detector thing using arduino
+title MCR (morse code redundancy)
+
+keyboard user input maybe command line to learn that
+passes to arduino to translate to LED/laser blinking
+photoresistor picks that up
+translates back to morse code
+(translates back to words?)
+puts back on command line (maybe)
+
+ok so should focus on the arduino part first (just the beeps and boops)
+dot is (short amount of time)
+dash is (longer, but still short amount of time)
+
+i should find out the time stuff about the photoresistors i'm using
+ordered:
+ 30 photoresistors 5mm 150 volts (max)  10 lux 
+ 10 laser boys 6mm 5 volts 
+
+yeah there's a lot more to work on circuitry wise
+heck
+
+algorithm-wise tho things might be pretty good
+
+letters are entered (however that may happen)
+converts to dots and dashes
+makes LED/laser blink for set period of time
+photoresistor gets HIGH
+starts timer
+photoresistor gets LOW
+ends timer
+based on timer value, is either dot or dash
+hmm. might need some sort of end signal.
+
+also hysterisis. 
+(https://arduino.stackexchange.com/questions/39942/measuring-time-between-two-photoresistors-and-printing-time-on-lcd) is a good link describing
+
