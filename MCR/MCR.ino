@@ -3,10 +3,55 @@
  * dash and dot functions
  * one unit of time is 500ms
  */
-int unit = 500;
+
+
+ /**
+  *Simple test of the functionality of the photo resistor
+
+Connect the photoresistor one leg to pin 0, and pin to +5V
+Connect a resistor (around 10k is a good value, higher
+values gives higher readings) from pin 0 to GND. (see appendix of arduino notebook page 37 for schematics).
+
+----------------------------------------------------
+
+           PhotoR     10K
+ +5    o---/\/\/--.--/\/\/---o GND
+                  |
+ Pin 0 o-----------
+
+----------------------------------------------------
+
+
+int lightPin = 0;  //define a pin for Photo resistor
+int ledPin=11;     //define a pin for LED
+
+void setup()
+{
+    Serial.begin(9600);  //Begin serial communcation
+    pinMode( ledPin, OUTPUT );
+}
+
+void loop()
+{
+    Serial.println(analogRead(lightPin)); //Write the value of the photoresistor to the serial monitor.
+    digitalWrite(ledPin, analogRead(lightPin)/4);  //send the value to the ledPin. Depending on value of resistor 
+                                                //you have  to divide the value. for example, 
+                                                //with a 10k resistor divide the value by 2, for 100k resistor divide by 4.
+   delay(10); //short delay for faster response to light.
+}
+  */
+int unit = 500; // num of miliseconds per unit
+int pr = 0; //pin for photoresistor
+int led = 1; //pin for the LED
+static int dstate = 0; //assuming light starts off
+
+int prlow = 400;
+int prhigh = 600;
+
 
 void dash();
 void dot();
+int readpr(int prev);
 
 //all the letters of the alphabet
 void A();
@@ -14,7 +59,7 @@ void B();
 void C();
 void D();
 void E();
-void FF();
+void FF(); //called this because F() is already a function
 void G();
 void H();
 void I();
@@ -40,19 +85,19 @@ void spaceL();
 
 void dash(){
   //three units of time for dash
-  digitalWrite(LED_BUILTIN,HIGH);
+  digitalWrite(led,HIGH);
   delay(unit*3);
   //one unit of time for space between parts of the letter
-  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(led,LOW);
   delay(unit);
 }
 
 void dot(){
   //one unit of time
-  digitalWrite(LED_BUILTIN,HIGH);
+  digitalWrite(led,HIGH);
   delay(unit);
   //one unit of time for space between parts of the letter
-  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(led,LOW);
   delay(unit);
 }
 
@@ -219,22 +264,47 @@ void Z(){
 void spaceW(){
   //space b/t words is supposed to be 7 in MC
   //but that's too long so let's do 
-  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(led,LOW);
   delay(unit*5);
 }
 
 void spaceL(){
-  digitalWrite(LED_BUILTIN,LOW);
+  digitalWrite(led,LOW);
   delay(unit*3);
 }
 
+int readpr(int prev){
+  int state = analogRead(pr);
+  if(prev == LOW && state >= prhigh){
+    return HIGH;
+  }
+  else if(prev == HIGH && state  < prlow){
+    return LOW;
+  }
+  else{
+    return prev;
+  }
+}
 
 void setup() {
-  pinMode(LED_BUILTIN,OUTPUT);
+  Serial.begin(9600);
+  pinMode(led,OUTPUT);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
+  //uhhhh this is reading stuff. will likely have to put in another function
+  Serial.println(analogRead(pr));
+  delay(10);
+
+  int newstate = readpr(dstate);
+  if(dstate == LOW && newstate == HIGH){
+    //determine whether dot or dash
+  }
+  if(dstate == HIGH && newstate == LOW){
+    //determine where in sequence
+  }
+  dstate = newstate;
 
 }
