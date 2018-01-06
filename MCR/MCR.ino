@@ -3,50 +3,21 @@
  * dash and dot functions
  * one unit of time is 500ms
  */
-
-
- /**
-  *Simple test of the functionality of the photo resistor
-
-Connect the photoresistor one leg to pin 0, and pin to +5V
-Connect a resistor (around 10k is a good value, higher
-values gives higher readings) from pin 0 to GND. (see appendix of arduino notebook page 37 for schematics).
-
-----------------------------------------------------
-
-           PhotoR     10K
- +5    o---/\/\/--.--/\/\/---o GND
-                  |
- Pin 0 o-----------
-
-----------------------------------------------------
-
-
-int lightPin = 0;  //define a pin for Photo resistor
-int ledPin=11;     //define a pin for LED
-
-void setup()
-{
-    Serial.begin(9600);  //Begin serial communcation
-    pinMode( ledPin, OUTPUT );
-}
-
-void loop()
-{
-    Serial.println(analogRead(lightPin)); //Write the value of the photoresistor to the serial monitor.
-    digitalWrite(ledPin, analogRead(lightPin)/4);  //send the value to the ledPin. Depending on value of resistor 
-                                                //you have  to divide the value. for example, 
-                                                //with a 10k resistor divide the value by 2, for 100k resistor divide by 4.
-   delay(10); //short delay for faster response to light.
-}
-  */
+ 
 int unit = 500; // num of miliseconds per unit
-int pr = 0; //pin for photoresistor
+int pr = 5; //pin for photoresistor
 int led = 1; //pin for the LED
 static int dstate = 0; //assuming light starts off
 
 int prlow = 400;
 int prhigh = 600;
+
+int timer1start;
+int timer1stop;
+int timer2start;
+int timer2stop;
+int timer1;
+int timer2;
 
 
 void dash();
@@ -270,7 +241,7 @@ void spaceW(){
 
 void spaceL(){
   digitalWrite(led,LOW);
-  delay(unit*3);
+  delay(unit*2);
 }
 
 int readpr(int prev){
@@ -286,6 +257,27 @@ int readpr(int prev){
   }
 }
 
+char translate(int timerval, int isletter){
+  if(isletter){
+    if(timerval > (unit/2) && timerval < (unit*2)){ //giving it some leeway
+      //it's a dot
+    }
+    else if (timerval > (unit*2)){
+      //it's a dash
+    }
+  }
+  else{
+    if(timerval > (unit*1.5) && timerval < (unit*4)){ 
+      //go to next letter
+      //clear cache for letters
+    }
+    else if(timerval > (unit*4)){
+      //go to next word
+    }
+    //else it's just a space between a dash/dot, ignore
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   pinMode(led,OUTPUT);
@@ -294,17 +286,26 @@ void setup() {
 
 void loop() {
 
-  //uhhhh this is reading stuff. will likely have to put in another function
-  Serial.println(analogRead(pr));
-  delay(10);
+  char c;
 
-  int newstate = readpr(dstate);
+  //reading only. will likely have to put in another file altogether
+  Serial.println(analogRead(pr)); //for testing (later)
+  delay(250);
+
+  /*int newstate = readpr(dstate);
   if(dstate == LOW && newstate == HIGH){
-    //determine whether dot or dash
+    timer1start = millis();
+    timer2stop = millis();
+    timer2 = timer2stop - timer2start;
+    c = translate(timer2,0);
   }
   if(dstate == HIGH && newstate == LOW){
-    //determine where in sequence
+    timer1stop = millis();
+    timer2start = millis();
+    timer1 = timer1stop - timer1start;
+    c = translate(timer1,1);
   }
-  dstate = newstate;
+  dstate = newstate;*/
 
 }
+

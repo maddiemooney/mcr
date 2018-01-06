@@ -37,3 +37,8 @@ hmm. might need some sort of end signal.
 also hysterisis. 
 (https://arduino.stackexchange.com/questions/39942/measuring-time-between-two-photoresistors-and-printing-time-on-lcd) is a good link describing
 
+
+values for photoresistor:
+dark: 150k ohm
+light 12.5k ohm
+
