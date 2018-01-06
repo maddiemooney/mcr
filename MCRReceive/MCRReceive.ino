@@ -9,7 +9,7 @@
 */
 
 int unit = 500;
-int pr = 5;
+int pr = A0;
 int led = 1;
 static int dstate = 0;
 int pos = 0;
@@ -36,6 +36,7 @@ char message[100]; //going with a 100 char limit here
 
 int readpr(int prev);
 String translate(int timerval, int isletter);
+char getmorsechar(int letter[]);
 
 /*
  *******************************************************
@@ -206,14 +207,14 @@ void setup() {
 
 void loop() {
   String c;
-
-  //reading only. will likely have to put in another file altogether
-  Serial.print(millis() / 1000.0, 0); //for testing (later)
+  
+  Serial.print(millis() / 1000.0, 2); //for testing (later)
   Serial.print(',');
   Serial.print(analogRead(pr));
   Serial.print("\n");
-  delay(10);
+  delay(250);
 
+  /*
   int newstate = readpr(dstate);
   if (dstate == LOW && newstate == HIGH) {
     timer1start = millis();
@@ -228,4 +229,5 @@ void loop() {
     c = translate(timer1, 1);
   }
   dstate = newstate;
+  */
 }

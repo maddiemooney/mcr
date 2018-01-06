@@ -9,7 +9,7 @@
 */
 
 int unit = 500; // num milliseconds per unit
-int pr = 5; //pin for photoresistor
+int pr = A0; //pin for photoresistor
 int led = 1; //pin for LED
 
 
