@@ -8,15 +8,15 @@
  *******************************************************
 */
 
-int unit = 500;
+int unit = 1000;
 int pr = A0;
 int led = 1;
 static int dstate = 0;
 int pos = 0;
 int charpos = 0;
 
-int prlow = 400;
-int prhigh = 600;
+int prlow = 950;
+int prhigh = 980;
 
 int timer1start;
 int timer1stop;
@@ -26,7 +26,7 @@ int timer1;
 int timer2;
 
 int letter[4];
-char message[100]; //going with a 100 char limit here
+char message[6] = {'o','o','o','o','o','o'}; //going with a 6 char limit here
 
 /*
  *******************************************************
@@ -59,16 +59,19 @@ int readpr(int prev) {
 
 String translate(int timerval, int isletter) {
   if (charpos > 98) {
+    //Serial.println("shouldn't");
   }
   else {
     if (isletter) {
       if (timerval > (unit / 2) && timerval < (unit * 2)) { //giving it some leeway
         //it's a dot
+        Serial.println("dot");
         letter[pos] = 0;
         pos += 1;
       }
       else if (timerval > (unit * 2)) {
         //it's a dash
+        Serial.println("dash");
         letter[pos] = 1;
         pos += 1;
       }
@@ -78,18 +81,29 @@ String translate(int timerval, int isletter) {
         for (int i = pos + 1; i < 4; i++) {
           letter[i] = 2;
         }
+        //Serial.println("eol");
+        for(int j = 0; j<=3;j++){
+          //Serial.print(letter[j]);
+          //Serial.print(getmorsechar(letter));
+        }
+        //Serial.print("\n");
         pos = 0;
         message[charpos] = getmorsechar(letter);
         charpos += 1;
       }
       else if (timerval > (unit * 4)) {
         //add space to message
+        //Serial.println("eow");
         message[charpos] = ' ';
+        for(int k = 0;k<=5;k++){
+          Serial.print(message[k]);
+        }
         charpos += 1;
         pos = 0;
       }
       else {
         //don't do shit
+        //Serial.println("waiting");
       }
     }
   }
@@ -113,9 +127,9 @@ char getmorsechar(int letter[]) {
             case 1:
               switch (letter[3]) {
                 case 0:
-                  return '-';
-                case 1:
                   return 'F';
+                case 1:
+                  return '?';
                 default:
                   return 'U';
               }
@@ -127,22 +141,21 @@ char getmorsechar(int letter[]) {
             case 0:
               switch (letter[3]) {
                 case 0:
-                  return '?';
-                case 1:
                   return 'L';
+                case 1:
+                  return '?';
                 default:
                   return 'R';
               }
             case 1:
               switch (letter[3]) {
                 case 0:
-                  return 'J';
-                case 1:
                   return 'P';
+                case 1:
+                  return 'J';
                 default:
                   return 'W';
               }
-            //wjp
             default:
               return 'A';
           }
@@ -208,26 +221,32 @@ void setup() {
 void loop() {
   String c;
   
-  Serial.print(millis() / 1000.0, 2); //for testing (later)
+  /*Serial.print(millis() / 1000.0, 2); //for testing (later)
   Serial.print(',');
   Serial.print(analogRead(pr));
   Serial.print("\n");
-  delay(250);
+  delay(1000);*/
 
-  /*
+  
   int newstate = readpr(dstate);
   if (dstate == LOW && newstate == HIGH) {
+    //Serial.print("on");
     timer1start = millis();
     timer2stop = millis();
     timer2 = timer2stop - timer2start;
+    //Serial.print(timer2);
+    //Serial.print("\n");
     c = translate(timer2, 0);
   }
   if (dstate == HIGH && newstate == LOW) {
+    //Serial.print("off");
     timer1stop = millis();
     timer2start = millis();
     timer1 = timer1stop - timer1start;
+    //Serial.print(timer1);
+    //Serial.print("\n");
     c = translate(timer1, 1);
   }
   dstate = newstate;
-  */
+  
 }

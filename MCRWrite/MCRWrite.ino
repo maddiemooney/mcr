@@ -8,9 +8,9 @@
  *******************************************************
 */
 
-int unit = 500; // num milliseconds per unit
+int unit = 1000; // num milliseconds per unit
 int pr = A0; //pin for photoresistor
-int led = 1; //pin for LED
+int led = 6; //pin for LED
 
 
 /*
@@ -255,6 +255,14 @@ void setup() {
 }
 
 void loop() {
+  
+
+  A();
+  spaceL();
+  B();
+  spaceL();
+  C();
+  spaceW();
 
 
 }
