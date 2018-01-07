@@ -8,7 +8,7 @@
  *******************************************************
 */
 
-int unit = 1000; // num milliseconds per unit
+int unit = 100; // num milliseconds per unit
 int pr = A0; //pin for photoresistor
 int led = 6; //pin for LED
 

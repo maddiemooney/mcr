@@ -8,9 +8,9 @@
  *******************************************************
 */
 
-int unit = 1000;
+int unit = 100;
 int pr = A0;
-int led = 1;
+int led = 6;
 static int dstate = 0;
 int pos = 0;
 int charpos = 0;
@@ -26,7 +26,7 @@ int timer1;
 int timer2;
 
 int letter[4];
-char message[6] = {'o','o','o','o','o','o'}; //going with a 6 char limit here
+char message[6] = {' ',' ',' ',' ',' ',' '}; //going with a 6 char limit here
 
 /*
  *******************************************************
@@ -81,23 +81,19 @@ String translate(int timerval, int isletter) {
         for (int i = pos + 1; i < 4; i++) {
           letter[i] = 2;
         }
-        //Serial.println("eol");
-        for(int j = 0; j<=3;j++){
-          //Serial.print(letter[j]);
-          //Serial.print(getmorsechar(letter));
-        }
-        //Serial.print("\n");
+        Serial.println("eol");
         pos = 0;
         message[charpos] = getmorsechar(letter);
         charpos += 1;
       }
       else if (timerval > (unit * 4)) {
         //add space to message
-        //Serial.println("eow");
+        Serial.println("eow");
         message[charpos] = ' ';
         for(int k = 0;k<=5;k++){
           Serial.print(message[k]);
         }
+        Serial.print("\n");
         charpos += 1;
         pos = 0;
       }
